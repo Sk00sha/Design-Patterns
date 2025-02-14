@@ -1,36 +1,52 @@
-class Vehicle(ABC):
+from abc import ABC, abstractmethod
+
+
+class Burger(ABC):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name=""
+
+    def getName(self) -> str:
+        return self.name
+    
     @abstractmethod
-    def getType(self) -> str:
+    def addToppings(self,topings:list):
         pass
 
-class Car(Vehicle):
-    def getType(self) -> str:
-        return "Car"
+class CheeseBurger(Burger):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name="CheeseBurger"
 
-class Bike(Vehicle):
-    def getType(self) -> str:
-        return "Bike"
+    def getName(self) -> str:
+        return super().getName()
+    
+    def addToppings(self,topings):
+        self.topings = topings
 
-class Truck(Vehicle):
-    def getType(self) -> str:
-        return "Truck"
+class BurgerFactory(ABC):
+    def __init__(self) -> None:
+        super().__init__()
 
-class VehicleFactory(ABC):
     @abstractmethod
-    def createVehicle(self) -> Vehicle:
+    def createBurger(burgerType:str,topings):
         pass
 
-class CarFactory(VehicleFactory):
-    def createVehicle(self) -> Vehicle:
-        return Car()
-    # Write your code here
+    
+class CheeseBurgerFactory(BurgerFactory):
+    def __init__(self) -> None:
+        super().__init__()
 
-class BikeFactory(VehicleFactory):
-    def createVehicle(self) -> Vehicle:
-        return Bike()
-    # Write your code here
+    
+    def createBurger(self,burgerType: str,topings):
+        if burgerType=="cheese":
+            cheese = CheeseBurger()
+            cheese.addToppings(topings)
+            return cheese
+        
 
-class TruckFactory(VehicleFactory):
-    def createVehicle(self) -> Vehicle:
-        return Truck()
-    # Write your code here
+cheeseFactory = CheeseBurgerFactory()
+
+burger = cheeseFactory.createBurger("cheese",["cheese","mayo","bacon"])
+
+print(burger.topings)
